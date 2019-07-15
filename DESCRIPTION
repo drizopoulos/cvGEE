@@ -1,0 +1,19 @@
+Package: cvGEE
+Title: Cross-Validated Predictions from GEE
+Version: 0.6-2
+Authors@R: person("Dimitris", "Rizopoulos", email = "d.rizopoulos@erasmusmc.nl",
+                  role = c("aut", "cre"), comment = c(ORCID = '0000-0001-9397-0900'))
+Date: 2019-07-04
+Maintainer: Dimitris Rizopoulos <d.rizopoulos@erasmusmc.nl>
+BugReports: https://github.com/drizopoulos/GLMMadaptive/issues
+Description: Cross-validated proper scoring rules from generalized estimating equations; Jose C. Pinheiro and Douglas M. Bates (1995) 
+    <doi:10.1080/10618600.1995.10474663>.
+Depends: geepack
+Suggests: lattice, knitr, rmarkdown, pkgdown
+Encoding: UTF-8
+LazyLoad: yes
+LazyData: yes
+License: GPL (>= 3)
+URL: https://drizopoulos.github.io/cvGEE/, https://github.com/drizopoulos/cvGEE
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1

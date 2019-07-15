@@ -1,0 +1,6 @@
+export(cv_gee)
+
+importFrom("stats", "dbinom", "dpois", "model.frame", "model.matrix", "model.offset",
+             "model.response", "formula", "family", "complete.cases", 
+           "model.frame.default")
+importFrom("utils", "as.relistable", "relist")
