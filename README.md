@@ -1,23 +1,16 @@
-GLMMadaptive: Generalized Linear Mixed Models using Adaptive Gaussian Quadrature
+cvGEE: Cross-Validated Predictions from GEE
 ================
 
-[![Travis-CI Build Status](https://travis-ci.org/drizopoulos/GLMMadaptive.svg?branch=master)](https://travis-ci.org/drizopoulos/GLMMadaptive) [![CRAN status](http://www.r-pkg.org/badges/version/GLMMadaptive)](https://cran.r-project.org/package=GLMMadaptive) [![](https://cranlogs.r-pkg.org/badges/grand-total/GLMMadaptive)](https://CRAN.R-project.org/package=GLMMadaptive) [![Download counter](http://cranlogs.r-pkg.org/badges/GLMMadaptive)](https://cran.r-project.org/package=GLMMadaptive) 
-[![Rdoc](http://www.rdocumentation.org/badges/version/GLMMadaptive)](http://www.rdocumentation.org/packages/GLMMadaptive)
-[![rpackages.io rank](https://www.rpackages.io/badge/GLMMadaptive.svg)](https://www.rpackages.io/package/GLMMadaptive)
+[![Travis-CI Build Status](https://travis-ci.org/drizopoulos/cvGEE.svg?branch=master)](https://travis-ci.org/drizopoulos/cvGEE) [![CRAN status](http://www.r-pkg.org/badges/version/cvGEE)](https://cran.r-project.org/package=cvGEE) [![](https://cranlogs.r-pkg.org/badges/grand-total/cvGEE)](https://CRAN.R-project.org/package=cvGEE) [![Download counter](http://cranlogs.r-pkg.org/badges/cvGEE)](https://cran.r-project.org/package=cvGEE) 
+[![Rdoc](http://www.rdocumentation.org/badges/version/cvGEE)](http://www.rdocumentation.org/packages/cvGEE)
+[![rpackages.io rank](https://www.rpackages.io/badge/cvGEE.svg)](https://www.rpackages.io/package/cvGEE)
 
 <img src="man/figures/logo.png" height="205" align="right"/>
 
 Description
 ------------
 
-<strong>GLMMadaptive</strong> fits mixed effects models for grouped/clustered outcome 
-variables for which the integral over the random effects in the definition of the marginal
-likelihood cannot be solved analytically. The package approximates these integrals using 
-the adaptive Gauss-Hermite quadrature rule.
-
-Multiple random effects terms can be included for the grouping factor (e.g., random 
-intercepts, random linear slopes, random quadratic slopes), but currently only a single
-grouping factor is allowed.
+<strong>cvGEE</strong> ...
 
 Basic Features
 ------------
@@ -87,12 +80,10 @@ Installation
 The development version of the package can be installed from GitHub using the **devtools**
 package:
 ```r
-devtools::install_github("drizopoulos/GLMMadaptive")
+devtools::install_github("drizopoulos/cvGEE")
 ```
 
 and with vignettes
 ```r
-devtools::install_github("drizopoulos/GLMMadaptive", build_opts = NULL)
+devtools::install_github("drizopoulos/cvGEE", build_opts = NULL)
 ```
-
-Hex-sticker courtesy of Greg Papageorgiou [@gr_papageorgiou](https://twitter.com/gr_papageorgiou).
