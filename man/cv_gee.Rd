@@ -1,20 +1,17 @@
 \name{cv_gee}
-\alias{cv_geee}
+\alias{cv_gee}
 
 \title{
 Proper Scoring Rules for Categorical Data
 }
 
 \description{
-Calculates the logarithmic, quadratic/Brier and spherical based on a fitted mixed model
-for categorical data.
+Calculates the logarithmic, quadratic/Brier and spherical scoring rules based on generalized estimation equations.
 }
 
 \usage{
 cv_gee(object, rule = c("all", "quadratic", "logarithmic", "spherical"), 
-  max_count = 500, conf_int = FALSE, level = 0.95, 
-  M = 30, fold = 5, seed = 1L, 
-  return_data = FALSE)
+  max_count = 500, K = 5L, M = 10L, seed = 1L, return_data = FALSE)
 }
 
 \arguments{
@@ -22,10 +19,8 @@ cv_gee(object, rule = c("all", "quadratic", "logarithmic", "spherical"),
 \item{rule}{character string indicating the type of scoring rule to be used.}
 \item{max_count}{numeric scalar or vector denoting the maximum count up to which to calculate 
     probabilities; this is relevant for count response data.}
-\item{conf_int}{logical; if \code{TRUE} confidence interval for the scoring rule values are provided.}
-\item{level}{numeric scalar indicating the level of the confindence interval; used only when \code{cont_int = TRUE}.}
-\item{M}{numeric scalar denoting how many time the split of the data in \code{fold}s will be performed. The reported scoring rules values are the average over the \code{M} replicates.}
-\item{fold}{numeric scalar indicating the number of folds used in the cross-validation procedure.}
+\item{K}{numeric scalar indicating the number of folds used in the cross-validation procedure.}
+\item{M}{numeric scalar denoting how many times the split of the data in \code{K} folds will be performed. The reported scoring rules values are the average over the \code{M} replicates.}
 \item{seed}{numeric scalre providing the seed used in the procedure.}
 \item{return_data}{logical; if \code{TRUE} the values of the scoring rules are 
     ruturned as extra columns of the \code{data} behind \code{object}.}

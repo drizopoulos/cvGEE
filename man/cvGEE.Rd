@@ -1,6 +1,6 @@
-\name{GLMMadaptive}
-\alias{GLMMadaptive-package}
-\alias{GLMMadaptive}
+\name{cvGEE}
+\alias{cvGEE-package}
+\alias{cvGEE}
 \docType{package}
 
 \title{
@@ -15,10 +15,10 @@ Gaussian quadrature rule.
 
 \details{
 \tabular{ll}{
-Package: \tab GLMMadaptive\cr
+Package: \tab cvGEE\cr
 Type: \tab Package\cr
-Version: \tab 0.6-1\cr
-Date: \tab 2019-06-28\cr
+Version: \tab 0.1-0\cr
+Date: \tab 2019-07-15\cr
 License: \tab GPL (>=3)\cr
 }
 
@@ -52,11 +52,4 @@ New York: Springer-Verlag.
 
 \keyword{package}
 \keyword{multivariate}
-
-\seealso{
-    \code{\link{mixed_model}},
-    \code{\link{methods.MixMod}},
-    \code{\link{effectPlotData}},
-    \code{\link{marginal_coefs}}
-}
 
