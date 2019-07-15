@@ -1,12 +1,12 @@
 ---
-title: "Mixed Models for Ordinal Data"
+title: "Scoring Rules for GEE"
 author: "Dimitris Rizopoulos"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Mixed Models for Ordinal Data}
+  %\VignetteIndexEntry{Scoring Rules for GEE}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,8 +16,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library("GLMMadaptive")
+library("cvGEE")
 library("lattice")
+library("splines")
 ```
 
 ## Continuation Ratio Model
