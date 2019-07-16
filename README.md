@@ -10,7 +10,7 @@ cvGEE: Cross-Validated Predictions from GEE
 Description
 ------------
 
-<strong>cvGEE</strong> ...
+<strong>cvGEE</strong> calculates cross-validated versions of the logarithmic, quadrative and spherical scoring rules for categorical data based on generalized estimating equations.
 
 Basic Features
 ------------
@@ -53,27 +53,32 @@ function `effectPlotData()`.
 Basic Use
 ------------
 
-Let `y` denote a grouped/clustered outcome, `g` denote the grouping factor, and `x1` and
-`x2` covariates. A mixed effects model with `y` as outcome, `x1` and `x2` as fixed effects,
-and random intercepts is fitted with the code:
+We compare a linear and a nonlinear GEE for the dichotomized version of serum bilirubin from the PBC dataset
 ```r
-fm <- mixed_model(fixed = y ~ x1 + x2, random = ~ 1 | g, data = DF,
-                  family = poisson())
+library("geepack")
+library("splines")
+library("lattice")
 
-summary(fm)
+pbc2$serBilirD <- as.numeric(pbc2$serBilir > 1.2)
+
+gm1 <- geeglm(serBilirD ~ year * drug, 
+              family = binomial(), data = pbc2, id = id, 
+              corstr = "exchangeable")
+
+gm2 <- geeglm(serBilirD ~ ns(year, 3, Boundary.knots = c(0, 10)) * drug, 
+              family = binomial(), data = pbc2, id = id, 
+              corstr = "exchangeable")
+
+plot_data <- cv_gee(gm1, return_data = TRUE)
+plot_data$linear <- plot_data$.score
+plot_data$non_linear <- unlist(cv_gee(gm2))
+
+xyplot(linear + non_linear ~ year | .rule, data = plot_data, 
+       type = "smooth", auto.key = TRUE, layout = c(3, 1),
+       scales = list(y = list(relation = "free")),
+       xlab = "Follow-up time (years)", ylab = "Scoring Rules")
 ```
 
-In the `data` argument we provide the data frame `DF`, which contains the aforementioned 
-variables. In the family argument we specify the distribution of the grouped/clustered 
-outcome conditional on the random effects. To include in the random-effects part 
-intercepts and `x1`, we update the call to `mixed_model()` as
-```r
-gm <- mixed_model(fixed = y ~ x1 + x2, random = ~ x1 | g, data = DF,
-                  family = poisson())
-
-summary(gm)
-```
- 
 Installation
 ------------
 

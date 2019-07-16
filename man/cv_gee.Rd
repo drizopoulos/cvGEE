@@ -42,9 +42,23 @@ Dimitris Rizopoulos \email{d.rizopoulos@erasmusmc.nl}
 
 
 \examples{
-\donttest{
-NA
-NA
-NA
-}
+library("geepack")
+library("lattice")
+
+pbc2$serBilirD <- as.numeric(pbc2$serBilir > 1.2)
+
+fm1 <- geeglm(serBilirD ~ year, family = binomial(), data = pbc2, 
+              id = id, corstr = "exchangeable")
+
+fm2 <- geeglm(serBilirD ~ year * drug, family = binomial(), data = pbc2, 
+              id = id, corstr = "exchangeable")
+
+plot_data <- cv_gee(fm1, return_data = TRUE)
+plot_data$model_year <- plot_data$.score
+plot_data$model_year_drug <- unlist(cv_gee(fm2))
+
+xyplot(model_year + model_year_drug ~ year | .rule, data = plot_data, 
+       type = "smooth", auto.key = TRUE, layout = c(3, 1),
+       scales = list(y = list(relation = "free")),
+       xlab = "Follow-up time (years)", ylab = "Scoring Rules")
 }

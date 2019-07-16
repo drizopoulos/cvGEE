@@ -33,10 +33,10 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
             probs <- object$family$linkinv(eta)
 
             log_p_y <- dbinom(resp, size = N, prob = probs, log = TRUE)
-            quad_fun <- function (c1, c2, p) {
+            quad_fun_binomial <- function (c1, c2, p) {
                 sum(exp(2 * dbinom(x = c1, size = c2, prob = p, log = TRUE)))
             }
-            quadrat_p <- mapply(quad_fun, c1 = max_count_seq, c2 = N, p = probs)
+            quadrat_p <- mapply(quad_fun_binomial, c1 = max_count_seq, c2 = N, p = probs)
             switch(rule,
                    "all" = c(log_p_y, 2 * exp(log_p_y) - quadrat_p, 
                              exp(log_p_y - 0.5 * log(quadrat_p))),
@@ -47,10 +47,10 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
             counts <- object$family$linkinv(eta)
             log_p_y <- dpois(resp, lambda = counts, log = TRUE)
             max_count_seq <- lapply(max_count, seq, from = 0)
-            quad_fun <- function (c1, c2) {
+            quad_fun_poisson <- function (c1, c2) {
                 sum(exp(2 * dpois(c1, lambda = c2, log = TRUE)))
             }
-            quadrat_p <- mapply(quad_fun, c1 = max_count_seq, c2 = counts)
+            quadrat_p <- mapply(quad_fun_poisson, c1 = max_count_seq, c2 = counts)
             switch(rule,
                    "all" = c(log_p_y, 2 * exp(log_p_y) - quadrat_p, 
                              exp(log_p_y - 0.5 * log(quadrat_p))),
