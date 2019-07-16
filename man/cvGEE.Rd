@@ -4,13 +4,11 @@
 \docType{package}
 
 \title{
-Generalized Linear Mixed Models using Adaptive Gaussian Quadrature
+Proper Scoring Rules for Generalized Estimating Equations
 }
 
 \description{
-This package fits generalized linear mixed models for a single grouping factor under 
-maximum likelihood approximating the integrals over the random effects with an adaptive 
-Gaussian quadrature rule.
+Calculates the logarithmic, quadratic/Brier and spherical scoring rules based on generalized estimation equations.
 }
 
 \details{
@@ -18,22 +16,11 @@ Gaussian quadrature rule.
 Package: \tab cvGEE\cr
 Type: \tab Package\cr
 Version: \tab 0.1-0\cr
-Date: \tab 2019-07-15\cr
+Date: \tab 2019-07-16\cr
 License: \tab GPL (>=3)\cr
 }
 
-This package fits mixed effects models for grouped / repeated measurements data for which
-the integral over the random effects in the definition of the marginal likelihood cannot
-be solved analytically. The package approximates these integrals using the adaptive 
-Gauss-Hermite quadrature rule.
-
-Multiple random effects terms can be included for the grouping factor (e.g., random 
-intercepts, random linear slopes, random quadratic slopes), but currently only a single
-grouping factor is allowed.
-
-The package also offers several utility functions that can extract useful information from
-fitted mixed effects models. The most important of those are included in the 
-\bold{See also} Section below.
+The package provides the estimated values of the scoring rules for each observation of the original dataset. These values can be summarized/averaged or used in figures to evaluate how the GEE performs in different ranges of the data.
 }
 
 \author{
@@ -43,11 +30,10 @@ Maintainer: Dimitris Rizopoulos <d.rizopoulos@erasmusmc.nl>
 }
 
 \references{
-Fitzmaurice, G., Laird, N. and Ware J. (2011). \emph{Applied Longitudinal Analysis}, 
-2nd Ed. New York: John Wiley & Sons. 
+Carvalho, A. (2016). An overview of applications of proper scoring rules. 
+\emph{Decision Analysis} \bold{13}, 223-242. doi:10.1287/deca.2016.0337
 
-Molenberghs, G. and Verbeke, G. (2005). \emph{Models for Discrete Longitudinal Data}. 
-New York: Springer-Verlag. 
+Liang, K.Y. and Zeger, S.L. (1986). Longitudinal data  analysis  using  generalized  linear  models. \emph{Biometrika} \bold{73}, 13-22. doi:10.1093/biomet/73.1.13
 }
 
 \keyword{package}

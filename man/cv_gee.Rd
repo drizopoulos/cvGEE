@@ -32,9 +32,9 @@ A list or a data.frame with elements or (extra) columns the values of the logari
 
 \references{
 Carvalho, A. (2016). An overview of applications of proper scoring rules. 
-\emph{Decision Analysis} \bold{13}, 223--242. doi:10.1287/deca.2016.0337
+\emph{Decision Analysis} \bold{13}, 223-242. doi:10.1287/deca.2016.0337
 
-Liang, K.Y. and Zeger, S.L. (1986). Longitudinal data  analysis  using  generalized  linear  models. \emph{Biometrika} \bold{73}, 13--22. doi:10.1093/biomet/73.1.13
+Liang, K.Y. and Zeger, S.L. (1986). Longitudinal data  analysis  using  generalized  linear  models. \emph{Biometrika} \bold{73}, 13-22. doi:10.1093/biomet/73.1.13
 }
 
 \author{
