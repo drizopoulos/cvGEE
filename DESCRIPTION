@@ -5,7 +5,7 @@ Authors@R: person("Dimitris", "Rizopoulos", email = "d.rizopoulos@erasmusmc.nl",
                   role = c("aut", "cre"), comment = c(ORCID = '0000-0001-9397-0900'))
 Date: 2019-07-15
 Maintainer: Dimitris Rizopoulos <d.rizopoulos@erasmusmc.nl>
-BugReports: https://github.com/drizopoulos/GLMMadaptive/issues
+BugReports: https://github.com/drizopoulos/cvGEE/issues
 Description: Cross-validated proper scoring rules for generalized estimating equations; Kung-Yee Liang and Scott L. Zeger (1986) <doi:10.1093/biomet/73.1.13>.
 Suggests: geepack, lattice, knitr, rmarkdown, pkgdown
 Encoding: UTF-8
