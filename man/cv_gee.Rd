@@ -2,7 +2,7 @@
 \alias{cv_gee}
 
 \title{
-Proper Scoring Rules for Categorical Data
+Proper Scoring Rules for Generalized Estimating Equations
 }
 
 \description{
@@ -27,13 +27,14 @@ cv_gee(object, rule = c("all", "quadratic", "logarithmic", "spherical"),
 }
 
 \value{
-A list or a data.frame with elements or (extra) columns the values of the logarithmic, quadratic and spherical
-scoring rules calculated based on the GEE object.
+A list or a data.frame with elements or (extra) columns the values of the logarithmic, quadratic and spherical scoring rules calculated based on the GEE object.
 }
 
 \references{
 Carvalho, A. (2016). An overview of applications of proper scoring rules. 
 \emph{Decision Analysis} \bold{13}, 223--242. doi:10.1287/deca.2016.0337
+
+Liang, K.Y. and Zeger, S.L. (1986). Longitudinal data  analysis  using  generalized  linear  models. \emph{Biometrika} \bold{73}, 13--22. doi:10.1093/biomet/73.1.13
 }
 
 \author{
@@ -53,9 +54,9 @@ fm1 <- geeglm(serBilirD ~ year, family = binomial(), data = pbc2,
 fm2 <- geeglm(serBilirD ~ year * drug, family = binomial(), data = pbc2, 
               id = id, corstr = "exchangeable")
 
-plot_data <- cv_gee(fm1, return_data = TRUE)
+plot_data <- cv_gee(fm1, return_data = TRUE, M = 5)
 plot_data$model_year <- plot_data$.score
-plot_data$model_year_drug <- unlist(cv_gee(fm2))
+plot_data$model_year_drug <- unlist(cv_gee(fm2, M = 5))
 
 xyplot(model_year + model_year_drug ~ year | .rule, data = plot_data, 
        type = "smooth", auto.key = TRUE, layout = c(3, 1),
