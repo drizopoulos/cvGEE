@@ -23,7 +23,7 @@ library("splines")
 ```
 
 ## Scoring Rules
-### Definition
+
 
 ## Examples
 ### Linear versus non-linear model
