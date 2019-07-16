@@ -22,3 +22,5 @@ r_packages:
   - knitr
   - rmarkdown
   - pkgdown
+  - geepack
+  - lattice
