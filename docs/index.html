@@ -89,51 +89,40 @@
 <div id="description" class="section level2">
 <h2 class="hasAnchor">
 <a href="#description" class="anchor"></a>Description</h2>
-<p><strong>cvGEE</strong> calculates cross-validated versions of the logarithmic, quadrative and spherical scoring rules for categorical data based on generalized estimating equations.</p>
-</div>
-<div id="basic-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-features" class="anchor"></a>Basic Features</h2>
+<p><strong>cvGEE</strong> calculates cross-validated versions of the logarithmic, quadratic and spherical scoring rules based on generalized estimating equations.</p>
+<p>The package presumes that the GEE has been solved using the <code>geeglm()</code> function of the <a href="https://cran.r-project.org/package=geepack"><strong>geepack</strong></a>.</p>
 <ul>
-<li><p>The package contains a single model-fitting function named <code>mixed_model()</code> with four required arguments, <code>fixed</code> a formula for the fixed effects, <code>random</code> a formula for the random effects, <code>family</code> a family object specifying the type of response variable, and <code>data</code> a data frame containing the variables in the previously mentioned formulas.</p></li>
-<li><p>Methods for standard generics are provided, i.e., <code><a href="https://www.rdocumentation.org/packages/stats/topics/coef">coef()</a></code>, <code>fixef()</code>, <code>ranef()</code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/vcov">vcov()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/logLik">logLik()</a></code>, <code><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/anova">anova()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/confint">confint()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/fitted.values">fitted()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/residuals">residuals()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>, and <code><a href="https://www.rdocumentation.org/packages/stats/topics/simulate">simulate()</a></code>.</p></li>
-<li><p>Negative binomial mixed models can be fitted using the <code>negative.binomial()</code> family object.</p></li>
-<li><p>Zero-inflated Poisson and negative binomial models using the <code>zi.poisson()</code> and <code>zi.negative.binomial()</code> family objects.</p></li>
-<li><p>Hurdle Poisson and negative binomial models using the <code>hurdle.poisson()</code> and <code>hurdle.negative.binomial()</code> family objects.</p></li>
-<li><p>Two-part/hurdle mixed models for semi-continuous normal data using the <code>hurdle.lognormal()</code> family objects.</p></li>
-<li><p>Continuation ratio mixed models for ordinal data using functions <code>cr_setup()</code> and <code>cr_marg_probs()</code>.</p></li>
-<li><p>Beta and hurdle Beta mixed effects models using <code>beta.fam()</code> and <code>hurdle.beta.fam()</code> family objects.</p></li>
-<li><p>Users may also specify their own log-density function for the repeated measurements response variable, and the internal algorithms will take care of the optimization.</p></li>
-<li><p>Calculates the marginalized coefficients using the idea of Hedeker et al. (2017) using function <code>marginal_coefs()</code>.</p></li>
-<li><p>Predictions with confidence interval for constructing effects plots are provided by function <code>effectPlotData()</code>.</p></li>
+<li><p>For <code>family = gaussian()</code> only the quadratic rule is available calculated as the squared prediction error; lower values indicate a better predictive ability.</p></li>
+<li><p>For <code>family = binomial()</code> and <code>family = poisson()</code> the probabilities for each event/category are calculated using the binomial and Poisson probability mass functions, respectively. For these families all three scoring rules are available, with higher values in each rule indicating better predictive ability.</p></li>
 </ul>
 </div>
 <div id="basic-use" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-use" class="anchor"></a>Basic Use</h2>
-<p>We compare a linear and a nonlinear GEE for the dichotomized version of serum bilirubin from the PBC dataset</p>
+<p>We compare a linear and a nonlinear GEE for the dichotomized version of the serum bilirubin biomarker from the PBC dataset:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"geepack"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"splines"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"lattice"</span>)</a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5">pbc2<span class="op">$</span>serBilirD &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(pbc2<span class="op">$</span>serBilir <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.2</span>)</a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7">gm1 &lt;-<span class="st"> </span><span class="kw">geeglm</span>(serBilirD <span class="op">~</span><span class="st"> </span>year <span class="op">*</span><span class="st"> </span>drug, </a>
-<a class="sourceLine" id="cb1-8" title="8">              <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(), <span class="dt">data =</span> pbc2, <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb1-9" title="9">              <span class="dt">corstr =</span> <span class="st">"exchangeable"</span>)</a>
-<a class="sourceLine" id="cb1-10" title="10"></a>
-<a class="sourceLine" id="cb1-11" title="11">gm2 &lt;-<span class="st"> </span><span class="kw">geeglm</span>(serBilirD <span class="op">~</span><span class="st"> </span><span class="kw">ns</span>(year, <span class="dv">3</span>, <span class="dt">Boundary.knots =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">*</span><span class="st"> </span>drug, </a>
-<a class="sourceLine" id="cb1-12" title="12">              <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(), <span class="dt">data =</span> pbc2, <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb1-13" title="13">              <span class="dt">corstr =</span> <span class="st">"exchangeable"</span>)</a>
-<a class="sourceLine" id="cb1-14" title="14"></a>
-<a class="sourceLine" id="cb1-15" title="15">plot_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/cv_gee.html">cv_gee</a></span>(gm1, <span class="dt">return_data =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-16" title="16">plot_data<span class="op">$</span>linear &lt;-<span class="st"> </span>plot_data<span class="op">$</span>.score</a>
-<a class="sourceLine" id="cb1-17" title="17">plot_data<span class="op">$</span>non_linear &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unlist">unlist</a></span>(<span class="kw"><a href="reference/cv_gee.html">cv_gee</a></span>(gm2))</a>
-<a class="sourceLine" id="cb1-18" title="18"></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="kw">xyplot</span>(linear <span class="op">+</span><span class="st"> </span>non_linear <span class="op">~</span><span class="st"> </span>year <span class="op">|</span><span class="st"> </span>.rule, <span class="dt">data =</span> plot_data, </a>
-<a class="sourceLine" id="cb1-20" title="20">       <span class="dt">type =</span> <span class="st">"smooth"</span>, <span class="dt">auto.key =</span> <span class="ot">TRUE</span>, <span class="dt">layout =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb1-21" title="21">       <span class="dt">scales =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">y =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">relation =</span> <span class="st">"free"</span>)),</a>
-<a class="sourceLine" id="cb1-22" title="22">       <span class="dt">xlab =</span> <span class="st">"Follow-up time (years)"</span>, <span class="dt">ylab =</span> <span class="st">"Scoring Rules"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"cvGEE"</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"splines"</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"lattice"</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6">pbc2<span class="op">$</span>serBilirD &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(pbc2<span class="op">$</span>serBilir <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.2</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7"></a>
+<a class="sourceLine" id="cb1-8" title="8">gm1 &lt;-<span class="st"> </span><span class="kw">geeglm</span>(serBilirD <span class="op">~</span><span class="st"> </span>year <span class="op">*</span><span class="st"> </span>drug, </a>
+<a class="sourceLine" id="cb1-9" title="9">              <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(), <span class="dt">data =</span> pbc2, <span class="dt">id =</span> id, </a>
+<a class="sourceLine" id="cb1-10" title="10">              <span class="dt">corstr =</span> <span class="st">"exchangeable"</span>)</a>
+<a class="sourceLine" id="cb1-11" title="11"></a>
+<a class="sourceLine" id="cb1-12" title="12">gm2 &lt;-<span class="st"> </span><span class="kw">geeglm</span>(serBilirD <span class="op">~</span><span class="st"> </span><span class="kw">ns</span>(year, <span class="dv">3</span>, <span class="dt">Boundary.knots =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">*</span><span class="st"> </span>drug, </a>
+<a class="sourceLine" id="cb1-13" title="13">              <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(), <span class="dt">data =</span> pbc2, <span class="dt">id =</span> id, </a>
+<a class="sourceLine" id="cb1-14" title="14">              <span class="dt">corstr =</span> <span class="st">"exchangeable"</span>)</a>
+<a class="sourceLine" id="cb1-15" title="15"></a>
+<a class="sourceLine" id="cb1-16" title="16">plot_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/cv_gee.html">cv_gee</a></span>(gm1, <span class="dt">return_data =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-17" title="17">plot_data<span class="op">$</span>linear &lt;-<span class="st"> </span>plot_data<span class="op">$</span>.score</a>
+<a class="sourceLine" id="cb1-18" title="18">plot_data<span class="op">$</span>non_linear &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unlist">unlist</a></span>(<span class="kw"><a href="reference/cv_gee.html">cv_gee</a></span>(gm2))</a>
+<a class="sourceLine" id="cb1-19" title="19"></a>
+<a class="sourceLine" id="cb1-20" title="20"><span class="kw">xyplot</span>(linear <span class="op">+</span><span class="st"> </span>non_linear <span class="op">~</span><span class="st"> </span>year <span class="op">|</span><span class="st"> </span>.rule, <span class="dt">data =</span> plot_data, </a>
+<a class="sourceLine" id="cb1-21" title="21">       <span class="dt">type =</span> <span class="st">"smooth"</span>, <span class="dt">auto.key =</span> <span class="ot">TRUE</span>, <span class="dt">layout =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb1-22" title="22">       <span class="dt">scales =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">y =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">relation =</span> <span class="st">"free"</span>)),</a>
+<a class="sourceLine" id="cb1-23" title="23">       <span class="dt">xlab =</span> <span class="st">"Follow-up time (years)"</span>, <span class="dt">ylab =</span> <span class="st">"Scoring Rules"</span>)</a></code></pre></div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
