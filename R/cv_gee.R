@@ -38,22 +38,11 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
             }
             quadrat_p <- mapply(quad_fun, c1 = max_count_seq, c2 = N, p = probs)
             switch(rule,
-                   "all" = c(log_p_y, 2 * exp(log_p_y) + quadrat_p, 
+                   "all" = c(log_p_y, 2 * exp(log_p_y) - quadrat_p, 
                              exp(log_p_y - 0.5 * log(quadrat_p))),
                    "logarithmic" = log_p_y,
-                   "quadratic" = 2 * exp(log_p_y) + quadrat_p, 
+                   "quadratic" = 2 * exp(log_p_y) - quadrat_p, 
                    "spherical" = exp(log_p_y - 0.5 * log(quadrat_p)))
-            #p_y <- dbinom(resp, size = N, prob = probs)
-            #log_p_y <- dbinom(resp, size = N, prob = probs, log = TRUE)
-            #quadrat_p <- numeric(n)
-            #for (i in seq_len(n)) {
-            #    quadrat_p[i] <- sum(dbinom(max_count_seq[[i]], size = N[i], prob = probs[i])^2)
-            #}
-            #switch(rule, 
-            #       "all" = c(log_p_y, 2 * p_y + quadrat_p, p_y / sqrt(quadrat_p)),
-            #       "logarithmic" = log_p_y,
-            #       "quadratic" = 2 * p_y + quadrat_p, 
-            #       "spherical" = exp(log_p_y - 0.5 * log(quadrat_p)))
         } else if (object$family$family == "poisson") {
             counts <- object$family$linkinv(eta)
             log_p_y <- dpois(resp, lambda = counts, log = TRUE)
@@ -63,10 +52,10 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
             }
             quadrat_p <- mapply(quad_fun, c1 = max_count_seq, c2 = counts)
             switch(rule,
-                   "all" = c(log_p_y, 2 * exp(log_p_y) + quadrat_p, 
+                   "all" = c(log_p_y, 2 * exp(log_p_y) - quadrat_p, 
                              exp(log_p_y - 0.5 * log(quadrat_p))),
                    "logarithmic" = log_p_y,
-                   "quadratic" = 2 * exp(log_p_y) + quadrat_p, 
+                   "quadratic" = 2 * exp(log_p_y) - quadrat_p, 
                    "spherical" = exp(log_p_y - 0.5 * log(quadrat_p)))
         }
     }
@@ -85,6 +74,10 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
     id <- object$id
     unq_id <- unique(id)
     n <- length(unq_id)
+    mfX_orig <- model.frame(terms(formula(object)), data = data)
+    if (!is.null(nas <- attr(mfX_orig, "na.action"))) {
+      data <- data[-nas, ]
+    }
     Q <- if (rule == "all") nrow(data) * 3 else nrow(data)
     out <- matrix(0.0, Q, M)
     for (m in seq_len(M)) {
