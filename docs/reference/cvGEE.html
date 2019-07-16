@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generalized Linear Mixed Models using Adaptive Gaussian Quadrature — cvGEE • cvGEE</title>
+<title>Proper Scoring Rules for Generalized Estimating Equations — cvGEE • cvGEE</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,9 @@
 
 
 
-<meta property="og:title" content="Generalized Linear Mixed Models using Adaptive Gaussian Quadrature — cvGEE" />
+<meta property="og:title" content="Proper Scoring Rules for Generalized Estimating Equations — cvGEE" />
 
-<meta property="og:description" content="This package fits generalized linear mixed models for a single grouping factor under 
-maximum likelihood approximating the integrals over the random effects with an adaptive 
-Gaussian quadrature rule." />
+<meta property="og:description" content="Calculates the logarithmic, quadratic/Brier and spherical scoring rules based on generalized estimation equations." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -118,16 +116,14 @@ Gaussian quadrature rule." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generalized Linear Mixed Models using Adaptive Gaussian Quadrature</h1>
+    <h1>Proper Scoring Rules for Generalized Estimating Equations</h1>
     
     <div class="hidden name"><code>cvGEE.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This package fits generalized linear mixed models for a single grouping factor under 
-maximum likelihood approximating the integrals over the random effects with an adaptive 
-Gaussian quadrature rule.</p>
+    <p>Calculates the logarithmic, quadratic/Brier and spherical scoring rules based on generalized estimation equations.</p>
     
     </div>
 
@@ -140,27 +136,17 @@ Gaussian quadrature rule.</p>
 <tr><td>Type:</td><td>Package</td></tr>
 <tr><td></td><td>Version:</td></tr>
 <tr><td>0.1-0</td><td></td></tr>
-<tr><td>Date:</td><td>2019-07-15</td></tr>
+<tr><td>Date:</td><td>2019-07-16</td></tr>
 <tr><td></td><td>License:</td></tr>
 <tr><td>GPL (&gt;=3)</td><td></td></tr>
 </table>
-    <p>This package fits mixed effects models for grouped / repeated measurements data for which
-the integral over the random effects in the definition of the marginal likelihood cannot
-be solved analytically. The package approximates these integrals using the adaptive 
-Gauss-Hermite quadrature rule.</p>
-<p>Multiple random effects terms can be included for the grouping factor (e.g., random 
-intercepts, random linear slopes, random quadratic slopes), but currently only a single
-grouping factor is allowed.</p>
-<p>The package also offers several utility functions that can extract useful information from
-fitted mixed effects models. The most important of those are included in the 
-<b>See also</b> Section below.</p>
+    <p>The package provides the estimated values of the scoring rules for each observation of the original dataset. These values can be summarized/averaged or used in figures to evaluate how the GEE performs in different ranges of the data.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Fitzmaurice, G., Laird, N. and Ware J. (2011). <em>Applied Longitudinal Analysis</em>, 
-2nd Ed. New York: John Wiley &amp; Sons.</p>
-<p>Molenberghs, G. and Verbeke, G. (2005). <em>Models for Discrete Longitudinal Data</em>. 
-New York: Springer-Verlag.</p>
+    <p>Carvalho, A. (2016). An overview of applications of proper scoring rules. 
+<em>Decision Analysis</em> <b>13</b>, 223-242. doi:10.1287/deca.2016.0337</p>
+<p>Liang, K.Y. and Zeger, S.L. (1986). Longitudinal data  analysis  using  generalized  linear  models. <em>Biometrika</em> <b>73</b>, 13-22. doi:10.1093/biomet/73.1.13</p>
     
 
   </div>
