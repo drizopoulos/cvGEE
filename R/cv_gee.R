@@ -31,12 +31,14 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
             }
             max_count_seq <- lapply(max_count, seq, from = 0)
             probs <- object$family$linkinv(eta)
-
-            log_p_y <- dbinom(resp, size = N, prob = probs, log = TRUE)
-            quad_fun_binomial <- function (c1, c2, p) {
-                sum(exp(2 * dbinom(x = c1, size = c2, prob = p, log = TRUE)))
+            scale <- object$geese$gamma
+            phi <- (N - scale) / (scale - 1)
+            log_p_y <- dbbinom(x = resp, size = N, prob = probs, phi = phi, log = TRUE)
+            quad_fun_binomial <- function (c1, c2, p, phi) {
+              sum(exp(2 * dbbinom(x = c1, size = c2, prob = p, phi = phi, log = TRUE)))
             }
-            quadrat_p <- mapply(quad_fun_binomial, c1 = max_count_seq, c2 = N, p = probs)
+            quadrat_p <- mapply(quad_fun_binomial, c1 = max_count_seq, c2 = N, 
+                                p = probs, phi = phi)
             switch(rule,
                    "all" = c(log_p_y, 2 * exp(log_p_y) - quadrat_p, 
                              exp(log_p_y - 0.5 * log(quadrat_p))),
@@ -111,3 +113,23 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
         }
     }
 }
+
+dbbinom <- function (x, size, prob, phi, log = FALSE) {
+  if (all(size == 1)) {
+    return(dbinom(x, size, prob, log))
+  }
+  A <- prob * phi
+  B <- phi * (1 - prob)
+  log_numerator <- lbeta(x + A, size - x + B)
+  log_denominator <- lbeta(A, B)
+  fact <- lchoose(size, x)
+  if (log) {
+    fact + log_numerator - log_denominator
+  } else {
+    exp(fact + log_numerator - log_denominator)
+  }
+}
+
+
+
+

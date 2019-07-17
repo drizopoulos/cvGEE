@@ -42,15 +42,15 @@ gm2 <- geeglm(serCholD ~ ns(year, knots = c(2, 5, 7), Boundary.knots = c(0, 10))
 These GEEs are not nested and therefore we cannot compare them with a Wald test. Hence, we will use the proper scoring rules to investigate if there are differences between the splines. We calculate all scoring rules for each observation using the following calls to `cv_gee()`:
 ```{r, cv_gee_Ex1}
 plot_data <- cv_gee(gm1, return_data = TRUE)
-plot_data$non_linearI <- plot_data$.score
-plot_data$non_linearII <- unlist(cv_gee(gm2))
+plot_data$non_linear_I <- plot_data$.score
+plot_data$non_linear_II <- unlist(cv_gee(gm2))
 ```
 
-In the first call for model `gm1` we specified that we want to return the calculated values for the scoring rules in the original dataset used to solve the GEE (excluding any missing values in the outcome or covariates). The column that is created by `cv_gee()` and contains the values of the scoring rules is called `.score`. In the second line we make a copy of this column with the name `non_linearI` that will be used in the plotting next. The third line calculates the scoring rules for the second GEE. In this one we have asked for the dataset, but rather only for the values of the scoring rules that are put in the column `non_linearII` of the `plot_data`.
+In the first call for model `gm1` we specified that we want to return the calculated values for the scoring rules in the original dataset used to solve the GEE (excluding any missing values in the outcome or covariates). The column that is created by `cv_gee()` and contains the values of the scoring rules is called `.score`. In the second line we make a copy of this column with the name `non_linear_I` that will be used in the plotting next. The third line calculates the scoring rules for the second GEE. In this one we have asked for the dataset, but rather only for the values of the scoring rules that are put in the column `non_linear_II` of the `plot_data`.
 
 Next, to see if there are differences in predictive performance between the two GEEs we plot the three scoring rules for the two GEEs using the following call to `xyplot()` from package **lattice**:
 ```{r, plot_Ex1, eval = TRUE, fig.align = "center", fig.width = 8.5, fig.height = 7.5}
-xyplot(non_linearI + non_linearII ~ year | .rule, data = plot_data, 
+xyplot(non_linear_I + non_linear_II ~ year | .rule, data = plot_data, 
        type = "smooth", auto.key = TRUE, layout = c(3, 1),
        scales = list(y = list(relation = "free")),
        xlab = "Follow-up time (years)", ylab = "Scoring Rules")
@@ -59,10 +59,11 @@ xyplot(non_linearI + non_linearII ~ year | .rule, data = plot_data,
 We can make the following two observations. First, there are no differences between the two splines with regard to predictive ability. Second, that the predictive ability of both GEEs decreases over time.
 
 ### Working correlation matrix
-For our second example we aim to use the proper scoring rules for selecting the working correlation matrix for the AIDS dataset. This is again a longitudinal study on patients with advanced HIV infection. The outcome of interest is the CD4 cell count. Because of the CD4 cell counts can be high, often this outcome is analyzed with a linear mixed model after a square root transformation. Here we respect the nature of the outcome, and analyze it as a count. In the `aids` data frame the `CD4` variable is the already square root transformed CD4 cell counts. Hence, as a first step we transform it to the original scale.
+For our second example we aim to use the proper scoring rules for selecting the working correlation matrix for the AIDS dataset. This is again a longitudinal study on patients with advanced HIV infection. The outcome of interest is the CD4 cell count. Because of the CD4 cell counts can be high, often this outcome is analyzed with a linear mixed model after a square root transformation. Here we respect the nature of the outcome, and analyze it as a count. In the `aids` data frame the `CD4` variable is the already square root transformed CD4 cell counts. Hence, as a first step we transform it to the original scale. For the mean structure we only include the follow-up time as a categorical variable. For the working correlation we solve the GEEs assuming the independence, exchangeable and AR1 structures (the data are already ordered with respect to follow-up time).
 ```{r, models_Ex2}
 aids$CD4count <- aids$CD4 * aids$CD4
 aids$obstimef <- factor(aids$obstime)
+
 fm1 <- geeglm(CD4count ~ obstimef, family = poisson(), data = aids, 
               id = patient, corstr = "independence")
 
@@ -71,6 +72,7 @@ fm2 <- update(fm1, corstr = "exchangeable")
 fm3 <- update(fm1, corstr = "ar1")
 ```
 
+Using a similar syntax as in the previous example we create the `plot_data` dataset with the estimated values for the three scoring rules under the different working correlation structures.
 ```{r, cv_gee_Ex2}
 plot_data <- cv_gee(fm1, return_data = TRUE, max_count = aids$CD4count)
 plot_data$independence <- plot_data$.score
@@ -78,9 +80,12 @@ plot_data$exchangeable <- unlist(cv_gee(fm2, max_count = aids$CD4count))
 plot_data$ar1 <- unlist(cv_gee(fm3, max_count = aids$CD4count))
 ```
 
+And using a similar call to `xyplot()` we produce the plot of these values over the follow-up time:
 ```{r, plot_Ex2, eval = TRUE, fig.align = "center", fig.width = 8.5, fig.height = 7.5}
 xyplot(independence + exchangeable + ar1 ~ obstime | .rule, 
        data = plot_data, type = "smooth", auto.key = TRUE, layout = c(3, 1),
        scales = list(y = list(relation = "free")),
        xlab = "Follow-up time (months)", ylab = "Scoring Rules")
 ```
+
+We observe that the independence working correlation matrix seems to produce the better predictions compared to the other two. Also we observe that the predictive performance of the three structures remains relatively stable during follow-up.

@@ -3,5 +3,5 @@ export(cv_gee)
 importFrom("stats", "dbinom", "dpois", "model.frame", "model.matrix", "model.offset",
              "model.response", "formula", "family", "complete.cases", 
            "model.frame.default", ".getXlevels", "coef", "quantile", "runif",
-             "terms", "update")
+             "terms", "update", "dnbinom")
 importFrom("utils", "as.relistable", "relist")
