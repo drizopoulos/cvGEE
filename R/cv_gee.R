@@ -45,12 +45,15 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
                    "spherical" = exp(log_p_y - 0.5 * log(quadrat_p)))
         } else if (object$family$family == "poisson") {
             counts <- object$family$linkinv(eta)
-            log_p_y <- dpois(resp, lambda = counts, log = TRUE)
+            scale <- object$geese$gamma
+            shape_neg_bin <- counts / (scale - 1)
+            log_p_y <- dnbinom(x = resp, size = shape_neg_bin, mu = counts, log = TRUE)
             max_count_seq <- lapply(max_count, seq, from = 0)
-            quad_fun_poisson <- function (c1, c2) {
-                sum(exp(2 * dpois(c1, lambda = c2, log = TRUE)))
+            quad_fun_poisson <- function (c1, c2, c3) {
+                sum(exp(2 * dnbinom(x = c1, size = c2, mu = c3, log = TRUE)))
             }
-            quadrat_p <- mapply(quad_fun_poisson, c1 = max_count_seq, c2 = counts)
+            quadrat_p <- mapply(quad_fun_poisson, c1 = max_count_seq, c2 = shape_neg_bin,
+                                c3 = counts)
             switch(rule,
                    "all" = c(log_p_y, 2 * exp(log_p_y) - quadrat_p, 
                              exp(log_p_y - 0.5 * log(quadrat_p))),
