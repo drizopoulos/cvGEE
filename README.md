@@ -16,7 +16,7 @@ The package presumes that the GEE has been solved using the `geeglm()` function 
 
 - For `family = gaussian()` only the quadratic rule is available calculated as the squared prediction error; lower values indicate a better predictive ability.
 
-- For `family = binomial()` and `family = poisson()` the probabilities for each event/category are calculated using the binomial and Poisson probability mass functions, respectively. For these families all three scoring rules are available, with higher values in each rule indicating better predictive ability.
+- For `family = binomial()` and dichotomous outcome data the probabilities for the two categories are calculated from the Bernoulli probability mass function. For `family = binomial()` and binomial data the probabilities for each possible response are calculated from a beta-binomial distribution with variance set equal to the variance from the corresponding quasi-likelihood behind the GEE. Likewise for `family = poisson()` the probabilities for the number of events up to a particular maximum (set using the `max_count` argument) are calculated using the negative binomial distribution with variance set equal to the variance from the corresponding quasi-likelihood behind the GEE. For these families all three scoring rules are available, with higher values in each rule indicating better predictive ability.
 
 
 Basic Use
