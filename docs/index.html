@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cvGEE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
 <p>The package presumes that the GEE has been solved using the <code>geeglm()</code> function of the <a href="https://cran.r-project.org/package=geepack"><strong>geepack</strong></a>.</p>
 <ul>
 <li><p>For <code>family = gaussian()</code> only the quadratic rule is available calculated as the squared prediction error; lower values indicate a better predictive ability.</p></li>
-<li><p>For <code>family = binomial()</code> and <code>family = poisson()</code> the probabilities for each event/category are calculated using the binomial and Poisson probability mass functions, respectively. For these families all three scoring rules are available, with higher values in each rule indicating better predictive ability.</p></li>
+<li><p>For <code>family = binomial()</code> and dichotomous outcome data the probabilities for the two categories are calculated from the Bernoulli probability mass function. For <code>family = binomial()</code> and binomial data the probabilities for each possible response are calculated from a beta-binomial distribution with variance set equal to the variance from the corresponding quasi-likelihood behind the GEE. Likewise for <code>family = poisson()</code> the probabilities for the number of events up to a particular maximum (set using the <code>max_count</code> argument) are calculated using the negative binomial distribution with variance set equal to the variance from the corresponding quasi-likelihood behind the GEE. For these families all three scoring rules are available, with higher values in each rule indicating better predictive ability.</p></li>
 </ul>
 </div>
 <div id="basic-use" class="section level2">

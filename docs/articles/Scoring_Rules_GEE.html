@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cvGEE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1>Scoring Rules for GEE</h1>
                         <h4 class="author">Dimitris Rizopoulos</h4>
             
-            <h4 class="date">2019-07-17</h4>
+            <h4 class="date">2019-07-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/drizopoulos/cvGEE/blob/master/vignettes/Scoring_Rules_GEE.Rmd"><code>vignettes/Scoring_Rules_GEE.Rmd</code></a></small>
       <div class="hidden name"><code>Scoring_Rules_GEE.Rmd</code></div>
@@ -96,6 +96,17 @@
 <div id="scoring-rules" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scoring-rules" class="anchor"></a>Scoring Rules</h2>
+<p>We present here a short introduction into proper scoring rules. Let <span class="math inline">\(Y_{ij}\)</span> denote a categorical outcome taking values in the set <span class="math inline">\(\{0, 1, \ldots, K\}\)</span> for sample unit <span class="math inline">\(i\)</span> in cluster/group <span class="math inline">\(j\)</span>; <span class="math inline">\(K\)</span> can be finite (e.g., number of Bernoulli experiments) or infinite (count data). We let also <span class="math inline">\(\pi_{ijk} = \Pr(Y_{ij} = k)\)</span>, <span class="math inline">\(k = 1, \ldots, K\)</span>. A scoring rule <span class="math inline">\(R(\pi_{ij}, \{Y_{ij} = k\})\)</span> is a function that assigns a score for the forecast <span class="math inline">\(\{\pi_{ijk}; k = 1, \ldots, K\}\)</span> upon observing the outcome <span class="math inline">\(\{Y_{ij} = k\}\)</span>. That is, based on observing <span class="math inline">\(Y_{ij}\)</span>, we get probabilities for all <span class="math inline">\(K\)</span> categories. A proper scoring rule is rule that is maximized when the true probabilities are used in its calculation. The best-known proper scoring rules, together with their score ranges are: <span class="math display">\[\begin{array}{rl}
+\mbox{logarithmic:} &amp; R(\pi_{ij}, \{Y_{ij} = k\}) = \log(\pi_{ijk}), \quad (-\infty, 0],\\\\
+\mbox{quadratic:} &amp; R(\pi_{ij}, \{Y_{ij} = k\}) = 2\pi_{ijk} - \sum_{\ell = 1}^K \pi_{ij\ell}^2, \quad [-1, 1],\\\\
+\mbox{spherical:} &amp; R(\pi_{ij}, \{Y_{ij} = k\}) = \pi_{ijk} \Bigg / \sqrt{\sum_{\ell = 1}^K \pi_{ij\ell}^2}, \quad [0, 1].\\
+\end{array}\]</span> The quadratic and spherical scoring rules often result in extreme ranking differences when compared to the logarithmic scoring rule. Furthermore, due to being non-local, the quadratic and spherical scoring rules allow for the possibility of one model receiving the highest score when assigning a probability to the observed outcome lower than the probabilities assigned by other models.</p>
+<p>However, in generalized estimating equations we make no specification of the distribution of the data apart from the first two moments. Therefore, we do not get a probability mass function to obtain <span class="math inline">\(\{\pi_{ijk}; k = 1, \ldots, K\}\)</span>. Hence, in the calculation behind <strong>cvGEE</strong> the following XXX are made.</p>
+<ul>
+<li><p>For dichotomous data (<span class="math inline">\(K = 1\)</span>) we use the Bernoulli distribution in the calculation of the scoring rules.</p></li>
+<li><p>For binomial data and to account for over-dispersion we use the Beta-Binomial distribution. From the quasi-likelihood behind the GEE the variance of <span class="math inline">\(Y_{ijk}\)</span> is <span class="math inline">\(\mbox{var}(Y_{ijk}) = \phi K \pi_{ijk} (1 - \pi_{ijk})\)</span>, where <span class="math inline">\(\phi\)</span> is the over-dispersion parameter. The scale parameter <span class="math inline">\(\theta\)</span> of the Beta-Binomial distribution is set equal to <span class="math inline">\((K - \phi) / (\phi - 1)\)</span>, such that the variance of Beta-Binomial matches the variance behind the quasi-likelihood.</p></li>
+<li><p>For count data and to account for over-dispersion we use the negative binomial distribution. From the quasi-likelihood behind the GEE the variance of <span class="math inline">\(Y_{ij}\)</span> is <span class="math inline">\(\mbox{var}(Y_{ij}) = \phi \mu_{ij}\)</span>, where <span class="math inline">\(\phi\)</span> is the over-dispersion parameter and <span class="math inline">\(\mu_{ij} = E(Y_{ij})\)</span>. The shape parameter <span class="math inline">\(\theta\)</span> of the negative-binomial distribution is set equal to <span class="math inline">\(\mu_{ij} / (\phi - 1)\)</span>, such that the variance of negative-binomial matches the variance behind the quasi-likelihood.</p></li>
+</ul>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
