@@ -23,8 +23,22 @@ library("splines")
 ```
 
 ## Scoring Rules
+We present here a short introduction into proper scoring rules. Let $Y_{ij}$ denote a categorical outcome taking values in the set $\{0, 1, \ldots, K\}$ for sample unit $i$ in cluster/group $j$; $K$ can be finite (e.g., number of Bernoulli experiments) or infinite (count data). We let also $\pi_{ijk} = \Pr(Y_{ij} = k)$, $k = 1, \ldots, K$. A scoring rule $R(\pi_{ij}, \{Y_{ij} = k\})$ is a function that assigns a score for the forecast $\{\pi_{ijk}; k = 1, \ldots, K\}$ upon observing the outcome $\{Y_{ij} = k\}$. That is, based on observing $Y_{ij}$, we get probabilities for all $K$ categories. A proper scoring rule is rule that is maximized when the true probabilities are used in its calculation. The best-known proper scoring rules, together with their score ranges are:
+$$\begin{array}{rl}
+\mbox{logarithmic:} & R(\pi_{ij}, \{Y_{ij} = k\}) = \log(\pi_{ijk}), \quad (-\infty, 0],\\\\
+\mbox{quadratic:} & R(\pi_{ij}, \{Y_{ij} = k\}) = 2\pi_{ijk} - \sum_{\ell = 1}^K \pi_{ij\ell}^2, \quad [-1, 1],\\\\
+\mbox{spherical:} & R(\pi_{ij}, \{Y_{ij} = k\}) = \pi_{ijk} \Bigg / \sqrt{\sum_{\ell = 1}^K \pi_{ij\ell}^2}, \quad [0, 1].\\
+\end{array}$$
+The quadratic and spherical scoring rules often result in extreme ranking differences when compared to the logarithmic scoring rule. Furthermore, due to being non-local, the quadratic and spherical scoring rules allow for the possibility of one model receiving the highest score when assigning a probability to the observed outcome lower than the probabilities assigned by other models.
 
+However, in generalized estimating equations we make no specification of the distribution of the data apart from the first two moments. Therefore, we do not get a probability mass function to obtain $\{\pi_{ijk}; k = 1, \ldots, K\}$. Hence, in the calculation behind **cvGEE** the following XXX are made.
 
+- For dichotomous data ($K = 1$) we use the Bernoulli distribution in the calculation of the scoring rules.
+
+- For binomial data and to account for over-dispersion we use the Beta-Binomial distribution. From the quasi-likelihood behind the GEE the variance of $Y_{ijk}$ is $\mbox{var}(Y_{ijk}) = \phi K \pi_{ijk} (1 - \pi_{ijk})$, where $\phi$ is the over-dispersion parameter. The scale parameter $\theta$ of the Beta-Binomial distribution is set equal to $(K - \phi) / (\phi - 1)$, such that the variance of Beta-Binomial matches the variance behind the quasi-likelihood.
+
+- For count data and to account for over-dispersion we use the negative binomial distribution. From the quasi-likelihood behind the GEE the variance of $Y_{ij}$ is $\mbox{var}(Y_{ij}) = \phi \mu_{ij}$, where $\phi$ is the over-dispersion parameter and $\mu_{ij} = E(Y_{ij})$. The shape parameter $\theta$ of the negative-binomial distribution is set equal to $\mu_{ij} / (\phi - 1)$, such that the variance of negative-binomial matches the variance behind the quasi-likelihood.
+ 
 ## Examples
 ### Linear versus non-linear model
 For our first example we consider a dichotomized version of the serum cholesterol biomarker from the PBC dataset, taking as cut-off the value of 210 mg/dL. This a longitudinal dataset in which we have repeated measurements of serum cholesterol during follow-up for the patients randomized in the trial. The `id` variable identifies measurements taken on the same patient. We would like to investigate the placing of the knots in a natural cubic spline for the follow-up times for the log-odds of high serum cholesterol levels. In the first GEE we place two knots at the median and third quantile (the first quantile is equal to the boundary knot at zero). In the second GEE we place the knots at two, five and seven years of follow-up. The working correlation matrix is assumed to be the exchangeable one. We solve the two GEEs using the following calls to `geeglm()` from package **geepack**:
