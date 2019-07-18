@@ -60,5 +60,5 @@ devtools::install_github("drizopoulos/cvGEE")
 
 and with vignettes
 ```r
-devtools::install_github("drizopoulos/cvGEE", build_opts = NULL)
+devtools::install_github("drizopoulos/cvGEE", build_vignettes = TRUE)
 ```
