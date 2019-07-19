@@ -86,12 +86,12 @@ fm2 <- update(fm1, corstr = "exchangeable")
 fm3 <- update(fm1, corstr = "ar1")
 ```
 
-Using a similar syntax as in the previous example we create the `plot_data` dataset with the estimated values for the three scoring rules under the different working correlation structures.
+Using a similar syntax as in the previous example we create the `plot_data` dataset with the estimated values for the three scoring rules under the different working correlation structures. We set an upper bound in the maximum count to 1000 cells/$\mu \mbox{l}$, which is in the middle of the normal range for this biomarker in healthy individuals. In our sample, the maximum was 582 cells/$\mu \mbox{l}$
 ```{r, cv_gee_Ex2}
-plot_data <- cv_gee(fm1, return_data = TRUE, max_count = aids$CD4count)
+plot_data <- cv_gee(fm1, return_data = TRUE, max_count = 1000)
 plot_data$independence <- plot_data$.score
-plot_data$exchangeable <- unlist(cv_gee(fm2, max_count = aids$CD4count))
-plot_data$ar1 <- unlist(cv_gee(fm3, max_count = aids$CD4count))
+plot_data$exchangeable <- unlist(cv_gee(fm2, max_count = 1000))
+plot_data$ar1 <- unlist(cv_gee(fm3, max_count = 1000))
 ```
 
 And using a similar call to `xyplot()` we produce the plot of these values over the follow-up time:
