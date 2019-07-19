@@ -86,7 +86,7 @@ fm2 <- update(fm1, corstr = "exchangeable")
 fm3 <- update(fm1, corstr = "ar1")
 ```
 
-Using a similar syntax as in the previous example we create the `plot_data` dataset with the estimated values for the three scoring rules under the different working correlation structures. We set an upper bound in the maximum count to 1000 cells/$\mu \mbox{l}$, which is in the middle of the normal range for this biomarker in healthy individuals. In our sample, the maximum was 582 cells/$\mu \mbox{l}$
+Using a similar syntax as in the previous example we create the `plot_data` dataset with the estimated values for the three scoring rules under the different working correlation structures. We set an upper bound in the maximum count to 1000 cells/$\mu \mbox{l}$, which is in the middle of the normal range for this biomarker in healthy individuals. In our sample, the maximum was 582 cells/$\mu \mbox{l}$.
 ```{r, cv_gee_Ex2}
 plot_data <- cv_gee(fm1, return_data = TRUE, max_count = 1000)
 plot_data$independence <- plot_data$.score
