@@ -15,8 +15,8 @@ Calculates the logarithmic, quadratic/Brier and spherical scoring rules based on
 \tabular{ll}{
 Package: \tab cvGEE\cr
 Type: \tab Package\cr
-Version: \tab 0.3-0\cr
-Date: \tab 2019-07-20\cr
+Version: \tab 0.3-5\cr
+Date: \tab 2019-07-29\cr
 License: \tab GPL (>=3)\cr
 }
 

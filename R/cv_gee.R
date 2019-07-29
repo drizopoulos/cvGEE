@@ -4,13 +4,10 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
         stop("function 'cv_gee()' currently only works for 'geeglm' objects.")
     }
     rule <- match.arg(rule)
-    predict_geeglm <- function (object, newdata, orig_data) {
-        form <- formula(object)
-        namesVars <- all.vars(form)
-        orig_data <- orig_data[complete.cases(orig_data[namesVars]), ]
-        Terms <- terms(form)
-        mfX <- model.frame(Terms, data = orig_data)
-        mfX_new <- model.frame(Terms, newdata, xlev = .getXlevels(Terms, mfX))
+    predict_geeglm <- function (object, newdata) {
+        Terms <- terms(object$model)
+        mfX_new <- model.frame(Terms, newdata, 
+                               xlev = .getXlevels(Terms, object$model))
         X <- model.matrix(Terms, mfX_new)
         betas <- coef(object)
         eta <- c(X %*% betas)
@@ -92,7 +89,7 @@ cv_gee <- function (object, rule = c("all", "quadratic", "logarithmic", "spheric
             train_data <- data[!id %in% id.i, ]
             test_data <- data[id %in% id.i, ]
             fit_i <- update(object, data = train_data)
-            out[id %in% id.i, m] <- predict_geeglm(fit_i, test_data, train_data)
+            out[id %in% id.i, m] <- predict_geeglm(fit_i, test_data)
         }
     }
     scores <- rowMeans(out, na.rm = TRUE)
@@ -130,6 +127,22 @@ dbbinom <- function (x, size, prob, phi, log = FALSE) {
   }
 }
 
-
+predict.geeglm <- function (object, newdata, 
+                            type = c("link", "response"),
+                            se.fit = FALSE) {
+  type <- match.arg(type)
+  Terms <- terms(object$model)
+  mfX_new <- model.frame(Terms, newdata, 
+                         xlev = .getXlevels(Terms, object$model))
+  X <- model.matrix(Terms, mfX_new)
+  betas <- coef(object)
+  eta <- c(X %*% betas)
+  if (!se.fit) {
+    if (type == "link") eta else object$family$linkinv(eta)
+  } else {
+    list(fit = if (type == "link") eta else object$family$linkinv(eta),
+         se.fit = sqrt(diag(X %*% tcrossprod(object$geese$vbeta, X))))
+  }
+}
 
 
