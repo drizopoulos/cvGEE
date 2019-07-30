@@ -127,9 +127,8 @@ dbbinom <- function (x, size, prob, phi, log = FALSE) {
   }
 }
 
-predict.geeglm <- function (object, newdata, 
-                            type = c("link", "response"),
-                            se.fit = FALSE) {
+predict.geeglm <- function (object, newdata, type = c("link", "response"),
+                            se.fit = FALSE, ...) {
   type <- match.arg(type)
   Terms <- terms(object$model)
   mfX_new <- model.frame(Terms, newdata, 

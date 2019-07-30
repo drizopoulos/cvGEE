@@ -1,9 +1,7 @@
 export(cv_gee)
 
-importFrom("stats", "dbinom", "dpois", "model.frame", "model.matrix", "model.offset",
-             "model.response", "formula", "family", "complete.cases", 
-           "model.frame.default", ".getXlevels", "coef", "quantile", "runif",
-             "terms", "update", "dnbinom", "predict")
-importFrom("utils", "as.relistable", "relist")
+importFrom("stats", "dbinom", "predict", ".getXlevels", "coef", "dnbinom", "formula",
+             "model.frame", "model.matrix", "model.response", "runif",
+             "terms", "update")
 
 S3method(predict, geeglm)
